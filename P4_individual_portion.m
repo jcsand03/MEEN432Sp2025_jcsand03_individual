@@ -123,10 +123,10 @@ car_patch = patch(car_x_dim + x_vals(1), car_y_dim + y_vals(1), car_z_dim + z_va
 %inialize the path
 path = animatedline('Color', 'g')
 
-carData.vxd = 17
+carData.vxd = 17.75
 
 %run simulink
-mdl = 'Project4_week4_model_complete'
+mdl = 'p4_individual_simulink'
 load_system(mdl)
 set_param(mdl, 'StartTime', '0', 'StopTime', '3600')
 out = sim(mdl)
@@ -134,6 +134,7 @@ out = sim(mdl)
 %get data
 x_vals_sim = out.X.Data
 y_vals_sim = out.Y.Data
+Z_vals_sim = out.Z.Data
 distance_time = out.X.Time
 psi_vals_sim = out.psi.Data
 time_vals_sim = out.tout
@@ -147,7 +148,7 @@ for i = 1:length(x_vals_sim)-1
     % Get z-position (assuming you want to interpolate z_vals_sim from x/y)
     % Approximate z position using nearest neighbor for simplicity:
     [~, idx] = min((x_vals - x_vals_sim(i)).^2 + (y_vals - y_vals_sim(i)).^2);
-    z_pos = z_vals(idx);
+    z_pos = Z_vals_sim(i);
 
     % Create rotation matrix
     Rotation_Matrix = [cos(psi_vals_sim(i)), -sin(psi_vals_sim(i));
